@@ -77,10 +77,61 @@ export function OrderDetail() {
                 <span>{Number(o.shipping) ? formatINR(Number(o.shipping)) : "Free"}</span>
               </p>
               <p className="flex justify-between font-medium">
-                <span>Total · Cash on Delivery ({o.payment_status})</span>
+                <span>Total · {o.payment_method === "online" ? "Online payment" : "Cash on Delivery"}</span>
                 <span>{formatINR(Number(o.total))}</span>
               </p>
             </div>
+          </section>
+          <section className="rounded-2xl border bg-card/60 p-5 text-sm">
+            <h3 className="text-xl">Payment</h3>
+            <div className="mt-3 grid gap-3 sm:grid-cols-2">
+              <div>
+                <p className="text-muted-foreground">Status</p>
+                <p className="font-medium capitalize">{o.payment_status}</p>
+              </div>
+              <div>
+                <p className="text-muted-foreground">Method</p>
+                <p className="font-medium capitalize">
+                  {o.razorpay_payment_method ?? (o.payment_method === "online" ? "Razorpay" : "Cash on Delivery")}
+                </p>
+              </div>
+              {o.paid_at && (
+                <div>
+                  <p className="text-muted-foreground">Paid at</p>
+                  <p>{fmtDate(o.paid_at)}</p>
+                </div>
+              )}
+              {o.razorpay_payment_id && (
+                <div>
+                  <p className="text-muted-foreground">Razorpay Payment ID</p>
+                  <a
+                    href={`https://dashboard.razorpay.com/app/payments/${encodeURIComponent(o.razorpay_payment_id)}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="break-all font-medium text-primary underline underline-offset-4"
+                  >
+                    {o.razorpay_payment_id}
+                  </a>
+                </div>
+              )}
+              {o.razorpay_reference_id && (
+                <div>
+                  <p className="text-muted-foreground">Bank / UPI reference</p>
+                  <p className="break-all font-medium">{o.razorpay_reference_id}</p>
+                </div>
+              )}
+              {o.razorpay_order_id && (
+                <div>
+                  <p className="text-muted-foreground">Razorpay Order ID</p>
+                  <p className="break-all">{o.razorpay_order_id}</p>
+                </div>
+              )}
+            </div>
+            {o.status === "cancelled" && o.payment_status === "paid" && (
+              <p className="mt-4 rounded-lg border border-amber-500/40 bg-amber-500/10 p-3 text-amber-800">
+                This cancelled order has a captured payment. Review it for a refund in Razorpay.
+              </p>
+            )}
           </section>
           <section className="grid gap-4 rounded-2xl border bg-card/60 p-5 text-sm sm:grid-cols-2">
             <div>

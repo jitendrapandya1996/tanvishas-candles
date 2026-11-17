@@ -73,13 +73,14 @@ export function Orders() {
               <th className="p-3">Order</th>
               <th className="p-3">Customer</th>
               <th className="p-3">Total</th>
+              <th className="p-3">Payment</th>
               <th className="p-3">Status</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-border">
             {shown.length === 0 && (
               <tr>
-                <td colSpan={4} className="p-6 text-center text-muted-foreground">
+                <td colSpan={5} className="p-6 text-center text-muted-foreground">
                   No orders match.
                 </td>
               </tr>
@@ -117,6 +118,12 @@ export function Orders() {
                     <span className="block text-xs text-muted-foreground">{c.phone}</span>
                   </td>
                   <td className="p-3">{formatINR(Number(o.total))}</td>
+                  <td className="p-3">
+                    <span className="capitalize">{o.payment_status}</span>
+                    <span className="block text-xs text-muted-foreground">
+                      {o.razorpay_payment_method ?? (o.payment_method === "online" ? "Razorpay" : "Cash on Delivery")}
+                    </span>
+                  </td>
                   <td className="p-3">{STATUS_LABEL[o.status]}</td>
                 </tr>
               );

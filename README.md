@@ -35,7 +35,7 @@ TanStack Router and TanStack Query have been removed. React Router handles navig
 1. Create a Supabase project you control.
 2. Apply the SQL files in `supabase/migrations/` in order, or link the folder with the Supabase CLI and run `supabase db push`.
 3. Copy `frontend/.env.example` to `frontend/.env.local` and set the project's URL and anon key. Leave `VITE_API_URL` empty locally.
-4. Copy `backend/.env.example` to `backend/.env` and set the same Supabase URL and anon key, plus the service-role secret. Add Razorpay keys to enable online payments.
+4. Copy `backend/.env.example` to `backend/.env` and set the same Supabase URL and anon key, plus the service-role secret. Add Razorpay API keys and a webhook secret to enable verified online payments.
 5. Install root, frontend, and backend dependencies with `npm install` in each directory.
 6. From this directory run `npm run dev`. The frontend is served at `http://localhost:5173` and `/api` requests are proxied to Express at `http://localhost:3001`.
 
@@ -45,7 +45,7 @@ Keep the service-role key in `backend/.env` or the backend deployment environmen
 
 Create separate Vercel projects from this repository with Root Directories `frontend` and `backend`. The frontend uses the Vite SPA rewrite in `frontend/vercel.json`; Vercel detects the Express app from `backend/src/index.ts`.
 
-Set `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, and `VITE_API_URL` in the frontend project. Set `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `RAZORPAY_KEY_ID`, `RAZORPAY_KEY_SECRET`, and `CORS_ORIGIN` in the backend project. `VITE_API_URL` should point to the backend origin and `CORS_ORIGIN` should include the storefront origin.
+Set `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, and `VITE_API_URL` in the frontend project. Set `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `RAZORPAY_KEY_ID`, `RAZORPAY_KEY_SECRET`, `RAZORPAY_WEBHOOK_SECRET`, and `CORS_ORIGIN` in the backend project. `VITE_API_URL` should point to the backend origin and `CORS_ORIGIN` should include the storefront origin. In the Razorpay Dashboard, add a webhook at `https://<backend-domain>/api/payments/webhook`, use the same secret as `RAZORPAY_WEBHOOK_SECRET`, and subscribe to `payment.captured`.
 
 ## Database setup
 

@@ -38,7 +38,7 @@ function loadScript() {
 
 /** Opens Razorpay for an existing order. Resolves "paid", "dismissed", or throws. */
 export function useRazorpay() {
-  return async (orderId: string): Promise<"paid" | "dismissed"> => {
+  return async (orderId: string): Promise<"paid" | "pending" | "dismissed"> => {
     if (!(await loadScript()))
       throw new Error("Couldn't load the payment window. Check your connection.");
     const rp = await createPaymentOrder(orderId);
@@ -64,8 +64,8 @@ export function useRazorpay() {
           razorpay_signature: string;
         }) => {
           try {
-            await verifyPayment(orderId, r);
-            resolve("paid");
+            const result = await verifyPayment(orderId, r);
+            resolve(result.pending ? "pending" : "paid");
           } catch (e) {
             reject(e);
           }

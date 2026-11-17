@@ -5,3 +5,9 @@ export function verifyRazorpaySignature(orderId: string, paymentId: string, sign
   const received = Buffer.from(signature, "hex");
   return expected.length === received.length && timingSafeEqual(expected, received);
 }
+
+export function verifyRazorpayWebhookSignature(body: Buffer, signature: string, secret: string) {
+  const expected = createHmac("sha256", secret).update(body).digest();
+  const received = Buffer.from(signature, "hex");
+  return expected.length === received.length && timingSafeEqual(expected, received);
+}

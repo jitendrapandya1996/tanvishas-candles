@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import {
   Bell,
   Boxes,
+  CreditCard,
   ChartNoAxesCombined,
   History,
   LayoutDashboard,
@@ -43,6 +44,7 @@ function AdminShell({ isOwner }: { isOwner: boolean }) {
     { to: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
     { to: "/admin/sales", label: "Sales", icon: ChartNoAxesCombined },
     { to: "/admin/orders", label: "Orders", icon: Package },
+    { to: "/admin/razorpay", label: "Razorpay", icon: CreditCard },
     { to: "/admin/products", label: "Products", icon: Boxes },
     { to: "/admin/categories", label: "Categories", icon: Tags },
     { to: "/admin/stock", label: "Stock history", icon: History },

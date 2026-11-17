@@ -84,6 +84,7 @@ export function OrderDetail() {
     try {
       const r = await pay(id);
       if (r === "paid") toast.success("Payment received — thank you!");
+      else if (r === "pending") toast.message("Razorpay is confirming your payment. This order will update automatically.");
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Payment failed");
     }

@@ -102,6 +102,7 @@ export function Checkout() {
       try {
         const r = await pay(res.id);
         if (r === "paid") toast.success("Payment received — thank you!");
+        else if (r === "pending") toast.message("Razorpay is confirming your payment. This order will update automatically.");
         else
           toast.message(
             "Payment not completed. You can pay from your order page or pay cash on delivery.",

@@ -24,6 +24,7 @@ import { AdminLayout } from "@/pages/admin/AdminLayout";
 import { Dashboard } from "@/pages/admin/DashboardPage";
 import { Sales } from "@/pages/admin/SalesPage";
 import { Orders as AdminOrders } from "@/pages/admin/OrdersPage";
+import { RazorpayDashboard } from "@/pages/admin/RazorpayPage";
 import { OrderDetail as AdminOrderDetail } from "@/pages/admin/OrderDetailPage";
 import { Products } from "@/pages/admin/ProductsPage";
 import { Categories } from "@/pages/admin/CategoriesPage";
@@ -230,6 +231,19 @@ export function AppRouter() {
                       privatePage
                     />
                     <AdminOrders />
+                  </>
+                }
+              />
+              <Route
+                path="razorpay"
+                element={
+                  <>
+                    <PageHead
+                      title="Razorpay payments and settlements"
+                      description="Review payment attempts, captured amounts, refunds, and bank settlements."
+                      privatePage
+                    />
+                    <RazorpayDashboard />
                   </>
                 }
               />

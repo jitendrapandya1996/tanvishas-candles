@@ -16,5 +16,5 @@ export function verifyPayment(
   orderId: string,
   details: { razorpay_order_id: string; razorpay_payment_id: string; razorpay_signature: string },
 ) {
-  return apiPost("/payments/verify", { orderId, ...details });
+  return apiPost<{ ok: true; pending?: boolean }>("/payments/verify", { orderId, ...details });
 }
