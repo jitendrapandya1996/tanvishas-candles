@@ -52,13 +52,17 @@ export type RazorpayDashboardData = {
   };
 };
 
-export function razorpayDashboardQuery(paymentsSkip: number, settlementsSkip: number) {
-  const params = new URLSearchParams({
-    paymentsSkip: String(paymentsSkip),
-    settlementsSkip: String(settlementsSkip),
-  });
+export function razorpayDashboardQuery(
+  paymentsSkip: number,
+  settlementsSkip: number,
+  from?: number,
+  to?: number,
+) {
+  const params = new URLSearchParams({ paymentsSkip: String(paymentsSkip), settlementsSkip: String(settlementsSkip) });
+  if (from !== undefined) params.set("from", String(from));
+  if (to !== undefined) params.set("to", String(to));
   return {
-    queryKey: ["admin", "razorpay", paymentsSkip, settlementsSkip] as const,
+    queryKey: ["admin", "razorpay", paymentsSkip, settlementsSkip, from, to] as const,
     queryFn: () => apiGet<RazorpayDashboardData>(`/payments/admin/dashboard?${params}`),
     staleTime: 30_000,
   };

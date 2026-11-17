@@ -42,12 +42,22 @@ export async function razorpayDashboardController(req: Request, res: Response) {
   };
   const paymentsSkip = readSkip(req.query.paymentsSkip);
   const settlementsSkip = readSkip(req.query.settlementsSkip);
-  if (paymentsSkip === null || settlementsSkip === null) {
+  const readTimestamp = (value: unknown) => {
+    if (value === undefined) return undefined;
+    const parsed = typeof value === "string" ? Number(value) : Number.NaN;
+    return Number.isSafeInteger(parsed) && parsed >= 0 ? parsed : null;
+  };
+  const from = readTimestamp(req.query.from);
+  const to = readTimestamp(req.query.to);
+  if (
+    paymentsSkip === null || settlementsSkip === null || from === null || to === null
+    || (from !== undefined && to !== undefined && from > to)
+  ) {
     res.status(400).json({ error: "Invalid Razorpay dashboard page." });
     return;
   }
   try {
-    res.json(await getRazorpayDashboard(paymentsSkip, settlementsSkip));
+    res.json(await getRazorpayDashboard(paymentsSkip, settlementsSkip, from, to));
   } catch (error) {
     console.error("Razorpay admin dashboard request failed", error);
     res.status(502).json({ error: error instanceof Error ? error.message : "Razorpay dashboard data could not be loaded." });

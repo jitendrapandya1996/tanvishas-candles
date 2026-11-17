@@ -204,11 +204,13 @@ type RazorpayDashboardSettlement = {
   created_at: number;
 };
 
-async function getRazorpayCollection<T>(resource: string, skip: number) {
+async function getRazorpayCollection<T>(resource: string, skip: number, from?: number, to?: number) {
   const { id, secret } = paymentCredentials();
   const url = new URL(`https://api.razorpay.com/v1/${resource}`);
   url.searchParams.set("count", String(RAZORPAY_PAGE_SIZE));
   url.searchParams.set("skip", String(skip));
+  if (from !== undefined) url.searchParams.set("from", String(from));
+  if (to !== undefined) url.searchParams.set("to", String(to));
   const response = await fetch(url, {
     headers: { authorization: `Basic ${Buffer.from(`${id}:${secret}`).toString("base64")}` },
   });
@@ -219,10 +221,15 @@ async function getRazorpayCollection<T>(resource: string, skip: number) {
   return (await response.json()) as RazorpayCollection<T>;
 }
 
-export async function getRazorpayDashboard(paymentsSkip: number, settlementsSkip: number) {
+export async function getRazorpayDashboard(
+  paymentsSkip: number,
+  settlementsSkip: number,
+  from?: number,
+  to?: number,
+) {
   const [paymentCollection, settlementCollection] = await Promise.all([
-    getRazorpayCollection<RazorpayDashboardPayment>("payments", paymentsSkip),
-    getRazorpayCollection<RazorpayDashboardSettlement>("settlements", settlementsSkip),
+    getRazorpayCollection<RazorpayDashboardPayment>("payments", paymentsSkip, from, to),
+    getRazorpayCollection<RazorpayDashboardSettlement>("settlements", settlementsSkip, from, to),
   ]);
   const payments = paymentCollection.items ?? [];
   const settlements = settlementCollection.items ?? [];
